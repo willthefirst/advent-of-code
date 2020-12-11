@@ -63,14 +63,14 @@ const solvePart2 = async () => {
 	let x = 0;
 
 	while (i < nums.length && !foundTwoNums) {
-        foundTwoNums = findTwoNumsThatSumToX(nums.slice(i + 1), 2020 - nums[i]);
-        if (foundTwoNums) {
-            return nums[i] * foundTwoNums[0] * foundTwoNums[1];
-        }
+		foundTwoNums = findTwoNumsThatSumToX(nums.slice(i + 1), 2020 - nums[i]);
+		if (foundTwoNums) {
+			return nums[i] * foundTwoNums[0] * foundTwoNums[1];
+		}
 		i++;
 	}
 
-    return null;
+	return null;
 };
 
 solvePart2().then((solution) => console.log("Part 2 solution:", solution));

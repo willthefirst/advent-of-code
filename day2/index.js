@@ -5044,8 +5044,6 @@ const sample = {
   password: 'ccacccccc'
 }
 
- 
-
 
 for (let i = 0; i < input.length; i++) {
   count2 += passwordIsValid2(input[i].range, input[i].letter, input[i].password);
@@ -5053,5 +5051,3 @@ for (let i = 0; i < input.length; i++) {
 
 console.log(passwordIsValid2(sample.range, sample.letter, sample.password))
 console.log(count2);
-
-

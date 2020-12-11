@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Will's advent of code answers",
   "main": "index.ts",
-  "scripts": {},
+  "scripts": {
+    "start": "nodemon"
+  },
   "author": "Will Moritz",
   "license": "ISC",
   "dependencies": {
