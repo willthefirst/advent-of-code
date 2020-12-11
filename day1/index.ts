@@ -8,14 +8,19 @@ const parsePuzzleInput = async (filename: string): Promise<number[]> => {
 	return read(filename).then(strToNums);
 };
 
-const solvePart1 = async (): Promise<number | null> => {
-	const nums = await parsePuzzleInput("day1");
-	nums.sort();
+const sortNumArray = (nums: number[]) => {
+	return nums.sort((a, b) => a - b);
+};
+
+/* Part 1 */
+
+const findTwoNumsThatSumToX = (nums: number[], x: number): number[] | null => {
+	nums = sortNumArray(nums);
 
 	let i = 0,
 		j = nums.length;
 
-	let solution: number | null = null;
+	let solution: number[] | null = null;
 
 	// Compare first and last nums in sorted array
 	// If sum is smaller than 2020, increase index of first num
@@ -25,9 +30,9 @@ const solvePart1 = async (): Promise<number | null> => {
 			b = nums[j];
 		const sum = a + b;
 
-		if (sum === 2020) {
-			solution = a * b;
-		} else if (sum < 2020) {
+		if (sum === x) {
+			solution = [a, b];
+		} else if (sum < x) {
 			i++;
 		} else {
 			j--;
@@ -36,4 +41,36 @@ const solvePart1 = async (): Promise<number | null> => {
 	return solution;
 };
 
-solvePart1().then((solution) => console.log(solution));
+const solvePart1 = async (): Promise<void> => {
+	let nums: number[] = await parsePuzzleInput("day1");
+	const result = findTwoNumsThatSumToX(nums, 2020);
+
+	if (!result) {
+		console.log("Part 1 solution:", null);
+	} else {
+		console.log("Part 1 solution:", result[0] * result[1]);
+	}
+};
+
+solvePart1();
+
+/* Part 2 */
+
+const solvePart2 = async () => {
+	let nums: number[] = await parsePuzzleInput("day1");
+	let foundTwoNums = null;
+	let i = 0;
+	let x = 0;
+
+	while (i < nums.length && !foundTwoNums) {
+        foundTwoNums = findTwoNumsThatSumToX(nums.slice(i + 1), 2020 - nums[i]);
+        if (foundTwoNums) {
+            return nums[i] * foundTwoNums[0] * foundTwoNums[1];
+        }
+		i++;
+	}
+
+    return null;
+};
+
+solvePart2().then((solution) => console.log("Part 2 solution:", solution));
