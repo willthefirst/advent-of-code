@@ -7,8 +7,9 @@
 			"name": "Node: Nodemon",
 			"processId": "${command:PickProcess}",
 			"restart": true,
-			"protocol": "inspector"
+			"protocol": "inspector",
+			"sourceMaps": true,
+			"resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
 		}
-	],
-	"resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"]
+	]
 }
