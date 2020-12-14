@@ -1,9 +1,0 @@
-import { read } from '../utils'
-
-const parseInput = (filename: string) => {
-    read(filename).then((string) => {
-        console.log(string);
-    })
-}
-
-parseInput('day5');

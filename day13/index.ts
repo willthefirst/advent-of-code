@@ -1,6 +1,8 @@
 import { read } from "../utils";
 
-const parseInput = async (filename: string): Promise<{ earliestDepartTime: number; busIds: number[] }> => {
+type busId = string | number;
+
+const parseInputForP1 = async (filename: string): Promise<{ earliestDepartTime: number; busIds: number[] }> => {
 	const string = await read(filename);
 	const [s1, s2] = string.split("\n");
 	const earliestDepartTime: number = Number(s1);
@@ -11,11 +13,32 @@ const parseInput = async (filename: string): Promise<{ earliestDepartTime: numbe
 	return { earliestDepartTime, busIds };
 };
 
-const getSoonestDepartTime = (earliestTime: number, busId: number): number => {
-	return Math.floor(earliestTime / busId) * busId + busId;
+const parseInputForP2 = async (filename: string): Promise<{ earliestDepartTime: number; busIds: busId[] }> => {
+	const string = await read(filename);
+	const [s1, s2] = string.split("\n");
+	const earliestDepartTime: number = Number(s1);
+	const busIds: busId[] = s2
+		.split(",")
+		.map((str) => str === "x" ? str : Number(str));
+	return { earliestDepartTime, busIds };
 };
 
-// console.log(getSoonestDepartTime(6, 3));
+const getSoonestDepartTimeAfter = (earliestTime: number, busId: number): number => {
+    if (earliestTime % busId === 0) {
+        return earliestTime
+    } else {
+        return Math.floor(earliestTime / busId) * busId + busId;
+    }
+};
+
+const getSoonestDepartTimeBefore = (earliestTime: number, busId: number): number => {
+    const remainder = earliestTime % busId;
+    if (remainder === 0) {
+        return earliestTime
+    } else {
+        return Math.floor(earliestTime / busId) * busId
+    }
+};
 
 const getWait = (t1: number, t2: number) => {
 	if (t1 > t2) {
@@ -25,12 +48,12 @@ const getWait = (t1: number, t2: number) => {
 };
 
 const solvePart1 = async () => {
-	const { earliestDepartTime, busIds } = await parseInput("day13");
+	const { earliestDepartTime, busIds } = await parseInputForP1("day13");
 	let minWait: number = Infinity;
 	let bestBusId: number = 0;
 
 	busIds.forEach((busId) => {
-		const soonestDepartTime = getSoonestDepartTime(earliestDepartTime, busId);
+		const soonestDepartTime = getSoonestDepartTimeAfter(earliestDepartTime, busId);
 		const wait = getWait(earliestDepartTime, soonestDepartTime);
 		if (wait < minWait || !minWait) {
 			minWait = wait;
@@ -41,54 +64,43 @@ const solvePart1 = async () => {
 	return bestBusId * minWait;
 };
 
-type busId = string | number;
-
 const earliestTimeForBusEveryMinute = (busIds: busId[], times: busId[]): number => {
 	console.log(times);
+	const firstBusId = busIds[0] as number;
+	const firstTime = times[0] as number;
 
 	for (let i = 0; i < times.length; i++) {
 		let t = times[i];
 
-        if (t === "x") {
-            continue;
+		if (typeof t === "string") {
+			continue;
         }
-
-        // Now we know that t is a number.
-        t = t as number;
-        times[i] = times[i] as number;
-        busIds[i] = busIds[i] as number;
-        times[0] = times[0] as number;
-        busIds[0] = busIds[0] as number;  // This is an assumption since we never see x as the first value.
-
-        const differenceFromFirst: number = (t - i) - times[0];
+        
+		const differenceFromFirst: number = t - i - firstTime;
 
 		// Continue if time is what it should be given its index.
 		if (differenceFromFirst === 0) {
 			continue;
-        } else if (differenceFromFirst < 0) {
-            times[i] = (times[i] as number) + (busIds[i] as number);
+		} else if (differenceFromFirst < 0) {
+			times[i] = (times[i] as number) + (busIds[i] as number);
 			return earliestTimeForBusEveryMinute(busIds, times);
-        } else {
-			times[0] = times[0] + busIds[0];
+		} else {
+            times[i] = (firstTime - i) * t;
+            times[0] = getSoonestDepartTimeBefore(times[i] as number, firstBusId)
 			return earliestTimeForBusEveryMinute(busIds, times);
-        }5
+		}
 	}
 
-	console.log("Success!", times);
-	return times[0] as number;
+	return firstTime;
 };
 
-console.log(earliestTimeForBusEveryMinute([17,'x',13,19],[17,'x',13,19]));
-
 const solvePart2 = async (): Promise<number> => {
-	const { earliestDepartTime, busIds } = await parseInput("day13_test");
-	console.log(earliestDepartTime, busIds);
-
-	return 0;
+    const { busIds } = await parseInputForP2("day13_test");
+    return earliestTimeForBusEveryMinute(busIds, busIds);
 };
 
 /* Part 1 */
 // solvePart1().then((result) => console.log("Part 1 solution: ", result));
 
-// /* Part 2 */
+/* Part 2 */
 solvePart2().then((result) => console.log("Part 2 solution is", result === 1068781));
