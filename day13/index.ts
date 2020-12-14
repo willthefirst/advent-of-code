@@ -46,40 +46,39 @@ type busId = string | number;
 const earliestTimeForBusEveryMinute = (busIds: busId[], times: busId[]): number => {
 	console.log(times);
 
-	for (let i = 0; i < times.length - 1; i++) {
-		let t1 = times[i];
-		let t2 = times[i + 1];
+	for (let i = 0; i < times.length; i++) {
+		let t = times[i];
 
-        console.log(times);
-        if (t2 === "x" && typeof t1 === 'number') {
-            times[i + 1] = t1 + 1;
+        if (t === "x") {
             continue;
         }
 
-		// Success, we have sequential time.
-		if (getWait(t1 as number, t2 as number) === 1) {
+        // Now we know that t is a number.
+        t = t as number;
+        times[i] = times[i] as number;
+        busIds[i] = busIds[i] as number;
+        times[0] = times[0] as number;
+        busIds[0] = busIds[0] as number;  // This is an assumption since we never see x as the first value.
+
+        const differenceFromFirst: number = (t - i) - times[0];
+
+		// Continue if time is what it should be given its index.
+		if (differenceFromFirst === 0) {
 			continue;
-		}
-
-
-		if (t1 > t2) {
-			times[i + 1] = getSoonestDepartTime(t1 as number, busIds[i + 1] as number);
+        } else if (differenceFromFirst < 0) {
+            times[i] = (times[i] as number) + (busIds[i] as number);
 			return earliestTimeForBusEveryMinute(busIds, times);
-		} else {
-            if (busIds[i] === "x") {
-                
-            }
-
-			times[i] = (times[i] as number) + (busIds[i] as number); //todo this could be more efficient
+        } else {
+			times[0] = times[0] + busIds[0];
 			return earliestTimeForBusEveryMinute(busIds, times);
-		}
+        }5
 	}
 
 	console.log("Success!", times);
 	return times[0] as number;
 };
 
-console.log(earliestTimeForBusEveryMinute([2, "x", "x", "x", 11], [2, "x", "x", "x", 11]));
+console.log(earliestTimeForBusEveryMinute([17,'x',13,19],[17,'x',13,19]));
 
 const solvePart2 = async (): Promise<number> => {
 	const { earliestDepartTime, busIds } = await parseInput("day13_test");
