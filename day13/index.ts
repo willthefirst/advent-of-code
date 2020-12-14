@@ -64,6 +64,11 @@ const solvePart1 = async () => {
 	return bestBusId * minWait;
 };
 
+const lowestCommonMultiple = (a: number, b: number) => {
+	return a * b;
+}
+
+
 const earliestTimeForBusEveryMinute = (busIds: busId[], times: busId[]): number => {
 	console.log(times);
 	const firstBusId = busIds[0] as number;
@@ -82,11 +87,11 @@ const earliestTimeForBusEveryMinute = (busIds: busId[], times: busId[]): number 
 		if (differenceFromFirst === 0) {
 			continue;
 		} else if (differenceFromFirst < 0) {
-			times[i] = (times[i] as number) + (busIds[i] as number);
+			times[0] = getSoonestDepartTimeBefore(t - i, firstBusId);
 			return earliestTimeForBusEveryMinute(busIds, times);
 		} else {
-            times[i] = (firstTime - i) * t;
-            times[0] = getSoonestDepartTimeBefore(times[i] as number, firstBusId)
+            times[i] = (firstTime - i) * (busIds[i] as number);
+            times[0] = getSoonestDepartTimeBefore(times[i] as number - i, firstBusId)
 			return earliestTimeForBusEveryMinute(busIds, times);
 		}
 	}
@@ -95,8 +100,9 @@ const earliestTimeForBusEveryMinute = (busIds: busId[], times: busId[]): number 
 };
 
 const solvePart2 = async (): Promise<number> => {
-    const { busIds } = await parseInputForP2("day13_test");
-    return earliestTimeForBusEveryMinute(busIds, busIds);
+	const { busIds } = await parseInputForP2("day13_test");
+	const  busIds2  = Object.assign({}, busIds);
+    return earliestTimeForBusEveryMinute(busIds2, busIds);
 };
 
 /* Part 1 */
