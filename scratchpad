@@ -1,17 +1,18 @@
-    0   1   2   5
+0,1,2,3,6
 
-    Evaluating [0-2]
-    0       2 | 5
-    0   1   2 | 5 
+take elements out from index 1 until we can't -->
+
+0,2,3,6
+0,3,6
+
+take elements out from index 2 until we can't -->
+
+0,1,3,6
+
+take elements out from index 3 until we can't -->
 
 
-    at least 2 possible arrangements, both starting with 0
 
-    0 |     evaluate(2,5)
-        =   [2, 5] FINAL
-    0 | evaluate(1, 2, 5);
-        =   [1, 2, 5]
-            []
 
-    
+
     
