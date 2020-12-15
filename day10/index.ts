@@ -34,45 +34,30 @@ const solvePart1 = async () => {
 	return oneJoltDiffs * threeJoltDiffs;
 };
 
-const generateArrangements = (adapters: number[]): number[][] => {
-	const arrangements = [];
-	if (adapters.length !== 3) {
-		console.error("bad length fed to generateArrangements");
-	} else if (adapters[2] - adapters[0] <= 3) {
-		arrangements.push([adapters[0], adapters[2]]);
+const cloneArray = (arr: any[]) => {
+	return Array.from(arr);
+};
+
+const getAllArrangements = (adapters: number[]): number[][] => {
+	const arrangements = [adapters];
+	for (let i = 1; i < adapters.length - 1; i++) {
+		let arrangement = Array.from(adapters);
+		for (let j = i; j < arrangement.length - 1; ) {
+			if (arrangement[i + 1] - arrangement[i - 1] <= 3) {
+				arrangement.splice(i, 1);
+				getAllArrangements(arrangement.slice(i)).forEach((arr) => {
+					arrangements.push(arrangement.slice(0, i).concat(arr));
+				})
+			} else {
+				break;
+			}
+		}
 	}
-	arrangements.push(adapters);
 	return arrangements;
 };
 
-const getAllArrangements = (adapters: any[]): any[] => {
-	// Base case
-	if (adapters.length <= 2) {
-		return [adapters];
-	}
-
-	if (adapters.length === 3) {
-		return generateArrangements(adapters);
-	} else {
-		const arrangements = getAllArrangements(adapters.slice(0, 3)).map((arr1) => {
-			const nextArrs = getAllArrangements(arr1.slice(1).concat(adapters.slice(3)));
-			return nextArrs.flatMap((arr2) => {
-				return [arr1[0]].concat(arr2);
-			});
-		});
-		return arrangements;
-	}
-
-	// Recursive case
-	// if () {
-
-	// }
-
-	return [[0]];
-};
-
 const solvePart2 = async () => {
-	const adapters = await parseInput("day10_test");
+	const adapters = await parseInput("day10");
 	const arrangements = getAllArrangements(adapters);
 	console.log(arrangements);
 	return arrangements.length;
