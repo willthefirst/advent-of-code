@@ -58,7 +58,7 @@ let getAllArrangements = (adapters: number[]): number[][] => {
 			if (arrangement[i + 1] - arrangement[i - 1] <= 3) {
 				arrangement.splice(i, 1);
 				getAllArrangements(arrangement.slice(i)).forEach((arr) => {
-					arrangements.push(arr);
+					arrangements.push(arrangement.slice(0, i).concat(arr));
 				});
 			} else {
 				break;
@@ -73,6 +73,7 @@ getAllArrangements = memoize(getAllArrangements);
 const solvePart2 = async () => {
 	const adapters = await parseInput("day10_test");
 	const arrangements = getAllArrangements(adapters);
+	console.log(arrangements)
 	return arrangements.length;
 };
 
