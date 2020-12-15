@@ -34,11 +34,23 @@ const solvePart1 = async () => {
 	return oneJoltDiffs * threeJoltDiffs;
 };
 
-const cloneArray = (arr: any[]) => {
-	return Array.from(arr);
+const memoize = (fn: Function): any => {
+	const cache: any = {};
+	return function (arr: any[]) {
+		const key = arr[0];
+		
+		if (cache[key]) {
+			return cache[key];
+		}
+		
+		const result = fn(arr);
+		cache[key] = result;
+		console.log(cache);
+		return result;
+	};
 };
 
-const getAllArrangements = (adapters: number[]): number[][] => {
+let getAllArrangements = (adapters: number[]): number[][] => {
 	const arrangements = [adapters];
 	for (let i = 1; i < adapters.length - 1; i++) {
 		let arrangement = Array.from(adapters);
@@ -46,8 +58,8 @@ const getAllArrangements = (adapters: number[]): number[][] => {
 			if (arrangement[i + 1] - arrangement[i - 1] <= 3) {
 				arrangement.splice(i, 1);
 				getAllArrangements(arrangement.slice(i)).forEach((arr) => {
-					arrangements.push(arrangement.slice(0, i).concat(arr));
-				})
+					arrangements.push(arr);
+				});
 			} else {
 				break;
 			}
@@ -56,10 +68,11 @@ const getAllArrangements = (adapters: number[]): number[][] => {
 	return arrangements;
 };
 
+getAllArrangements = memoize(getAllArrangements);
+
 const solvePart2 = async () => {
-	const adapters = await parseInput("day10");
+	const adapters = await parseInput("day10_test");
 	const arrangements = getAllArrangements(adapters);
-	console.log(arrangements);
 	return arrangements.length;
 };
 
