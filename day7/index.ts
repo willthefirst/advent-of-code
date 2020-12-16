@@ -20,9 +20,24 @@ const parseInput = async (filename: string) => {
 	return rules;
 };
 
+const getParents = (bag: string, rules: any): string[] => {
+	const parents: string[] = [];
+	for (const key in rules) {
+		if (bag in rules[key]) {
+			parents.push(key);
+		}
+	}
+	return parents;
+};
+
+const getAllPossibleParents = (bag: string, rules: any): string[] => {
+	const parents = getParents(bag, rules);
+	return [...new Set(parents.concat(parents.map((parent) => getAllPossibleParents(parent, rules)).flat()))];
+};
+
 const solvePart1 = async () => {
-	const puzzle = await parseInput("day7_test");
-	return puzzle;
+	const bagRules = await parseInput("day7");
+	return getAllPossibleParents("shiny gold", bagRules).length;
 };
 
 const solvePart2 = async () => {
