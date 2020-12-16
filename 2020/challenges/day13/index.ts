@@ -1,4 +1,4 @@
-import { read } from "../utils";
+import { read } from "../../utils";
 
 type busId = string | number;
 

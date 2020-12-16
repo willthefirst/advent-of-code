@@ -1,4 +1,4 @@
-import { read } from "../utils";
+import { read } from "../../utils";
 
 const parseInput = async (filename: string) => {
 	return read(filename).then((string: string) => {

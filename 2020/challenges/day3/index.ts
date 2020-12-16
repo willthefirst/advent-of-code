@@ -1,4 +1,4 @@
-import { read } from "../utils";
+import { read } from "../../utils";
 
 const parsePuzzleInput = (filename: string): Promise<string[]> => {
 	return read(filename).then((string) => {

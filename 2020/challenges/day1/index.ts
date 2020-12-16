@@ -1,4 +1,4 @@
-import { read } from "../utils";
+import { read } from "../../utils";
 
 const strToNums = (str: string): number[] => {
 	return str.split("\n").map((line) => parseInt(line, 10));

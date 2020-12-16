@@ -1,4 +1,4 @@
-import { read } from "../utils";
+import { read } from "../../utils";
 
 const parseInput = async (filename: string): Promise<string[]> => {
 	const string = await read(filename);
