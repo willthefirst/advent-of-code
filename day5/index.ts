@@ -1,9 +1,8 @@
 import { read } from "../utils";
 
-const parseInput = (filename: string) => {
-	return read(filename).then((string: string) => {
-		return string.split("\n");
-	});
+const parseInput = async (filename: string): Promise<string[]> => {
+	const string = await read(filename);
+	return string.split("\n");
 };
 
 const binToInt = (bin: string): number => {
