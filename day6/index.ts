@@ -2,12 +2,21 @@ import { read } from "../utils";
 
 const parseInput = async (filename: string) => {
 	const string = await read(filename);
-	return string;
+	return string.split("\n\n");
 };
 
+const countUniqueChars = (str: string): number => {
+	return([...new Set(str)].length);
+}
+
 const solvePart1 = async () => {
-	const puzzle = await parseInput("day6");
-	return puzzle;
+	const groups = await parseInput("day6");
+	return groups
+			.map(group => {
+				return countUniqueChars(
+					group.replace(/\n/g, "")
+				)
+			}).reduce((acc, curr) => acc + curr);
 };
 
 const solvePart2 = async () => {
