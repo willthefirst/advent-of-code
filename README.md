@@ -1,6 +1,6 @@
 # Advent Of Code 2020
 
-My answers to [Advent Of Code 2020](https://adventofcode.com/2020).
+My answers to [Advent Of Code 2020](https://adventofcode.com/2020), done in Javascript/Typescript.
 
 ## Development
 
@@ -8,8 +8,6 @@ My answers to [Advent Of Code 2020](https://adventofcode.com/2020).
 2) Run locally: `nodemon {path/to/file.ts}`
 
 For VS Code debugger, run `nodemon`, then attach debugger that process.
-
-## Todo
 
 ## Learnings
 
