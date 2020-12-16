@@ -73,7 +73,7 @@ getAllArrangements = memoize(getAllArrangements);
 const solvePart2 = async () => {
 	const adapters = await parseInput("day10_test");
 	const arrangements = getAllArrangements(adapters);
-	console.log(arrangements)
+	console.log(arrangementsp)
 	return arrangements.length;
 };
 
