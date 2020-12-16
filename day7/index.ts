@@ -40,10 +40,23 @@ const solvePart1 = async () => {
 	return getAllPossibleParents("shiny gold", bagRules).length;
 };
 
+const getRequiredChildren = (bag: string, rules: any): string[] => {
+	const result: string[] = [];
+	const children = rules[bag];
+
+	for (let key in children) {
+		for (let i = 0; i < children[key]; i++) {
+			result.push(key);
+			result.push(...getRequiredChildren(key, rules));
+		}
+	}
+	return result;
+};
+
 const solvePart2 = async () => {
-	const puzzle = await parseInput("day7");
-	return puzzle;
+	const bagRules = await parseInput("day7");
+	return getRequiredChildren("shiny gold", bagRules).length;
 };
 
 solvePart1().then((result) => console.log("Part 1 solution:", result));
-// solvePart2().then((result) => console.log("Part 2 solution:", result));
+solvePart2().then((result) => console.log("Part 2 solution:", result));
