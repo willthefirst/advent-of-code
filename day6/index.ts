@@ -6,12 +6,12 @@ const parseInput = async (filename: string) => {
 };
 
 const solvePart1 = async () => {
-	const puzzle = await parseInput("input_file_here");
+	const puzzle = await parseInput("day6");
 	return puzzle;
 };
 
 const solvePart2 = async () => {
-	const puzzle = await parseInput("input_file_here");
+	const puzzle = await parseInput("day6");
 	return puzzle;
 };
 
