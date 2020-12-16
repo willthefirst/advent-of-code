@@ -37,9 +37,14 @@ const solvePart1 = async () => {
 };
 
 const solvePart2 = async () => {
-	const puzzle = await parseInput("day5");
-	return puzzle;
+	const seats = await parseInput("day5");
+	const seatIds = seats.map(directionsToSeatId).sort((a, b) => a - b);
+	for (let i = seatIds.length - 1; i >= 0; i--) {
+		if (seatIds[i] - seatIds[i - 1] > 1) {
+			return seatIds[i] - 1;
+		}
+	}
 };
 
 solvePart1().then((result) => console.log("Part 1 solution:", result));
-// solvePart2().then((result) => console.log("Part 2 solution:", result));
+solvePart2().then((result) => console.log("Part 2 solution:", result));
