@@ -21,15 +21,16 @@ let execute = (
 	code: Instruction[],
 	acc: number,
 	prevIndex: number,
-	currIndex: number
+	currIndex: number,
+	cb: Function
 ): [prevIndex: number, acc: number] => {
-	if (!code[currIndex]) {
-		console.log("😟 outside our index scope.");
+	if (currIndex < 0 || currIndex >= code.length) {
+		// Outside scope of rules.
 		return [prevIndex, acc];
 	}
 
 	if (prevIndex === code.length - 1) {
-		console.log("😊 Terminated!");
+		// Successful termination.
 		return [prevIndex, acc];
 	}
 
@@ -38,32 +39,31 @@ let execute = (
 
 	switch (op) {
 		case "acc":
-			return execute(code, acc + arg, currIndex, currIndex + 1);
+			return cb(code, acc + arg, currIndex, currIndex + 1, cb);
 		case "jmp":
-			return execute(code, acc, currIndex, currIndex + arg);
+			return cb(code, acc, currIndex, currIndex + arg, cb);
 		default:
-			return execute(code, acc, currIndex, currIndex + 1);
+			return cb(code, acc, currIndex, currIndex + 1, cb);
 	}
 };
 
 const catchLoop = (fn: Function) => {
 	const indices: number[] = [];
-	return (code: Instruction[], acc: number, prevIndex: number, currIndex: number) => {
+	return (code: Instruction[], acc: number, prevIndex: number, currIndex: number, cb: Function) => {
 		if (indices.includes(currIndex)) {
-			console.log("Hit an infinite loop 😟");
+			// Hit an infinite loop
 			return [prevIndex, acc];
 		}
 		indices.push(currIndex);
-		const result = fn(code, acc, prevIndex, currIndex);
+		const result = fn(code, acc, prevIndex, currIndex, cb);
 		return result;
 	};
 };
 
-execute = catchLoop(execute);
-
 const solvePart1 = async () => {
+	let execute_ = catchLoop(execute);
 	const code = await parseInput("day8");
-	const [prevIndex, acc] = execute(code, 0, 0, 0);
+	const [prevIndex, acc] = execute_(code, 0, 0, 0, execute_);
 	return acc;
 };
 
@@ -75,77 +75,31 @@ const switchJmpAndNop = ({ op, arg }: Instruction): Instruction => {
 	}
 };
 
-const calculateDistance = ({ op, arg }: Instruction) => {
-	return op === "jmp" ? arg : 1;
+const attemptSingleExecution = (code: Instruction[]): [prevIndex: number, acc: number] => {
+	let execute_ = catchLoop(execute);
+	return execute_(code, 0, 0, 0, execute_);
 };
 
-const canGetToTarget = (
-	instr: Instruction,
-	index: number,
-	targetIndex: number
-): { succeeds: boolean; needsSwitch: boolean } => {
-	if (index + calculateDistance(instr) === targetIndex) {
-		return { succeeds: true, needsSwitch: false };
-	}
-
-	// const switchedInstr = switchJmpAndNop(instr);
-
-	// if (index + calculateDistance(switchedInstr) === targetIndex) {
-	// 	return { succeeds: true, needsSwitch: true };
-	// }
-
-	return { succeeds: false, needsSwitch: false };
-};
-
-const findIndicesToTarget = (code: Instruction[], targetIndex: number): any[] => {
-	const indices = [];
-
-	for (let i = code.length - 1; i >= 0; i--) {
+const getAccAfterFix = (code: Instruction[]): number | undefined => {
+	for (let i = 0; i < code.length; i++) {
 		const instr = code[i];
-
-		if (i === targetIndex || instr.op === "acc") {
+		if (instr.op === "acc") {
 			continue;
 		}
-
-		const testResult = canGetToTarget(instr, i, targetIndex);
-
-		if (testResult.succeeds) {
-			indices.push({ i, needsSwitch: testResult.needsSwitch });
+		let fixAttempt = Array.from(code);
+		fixAttempt[i] = switchJmpAndNop(instr);
+		const [prevIndex, acc] = attemptSingleExecution(fixAttempt);
+		if (prevIndex === code.length - 1) {
+			return acc;
 		}
 	}
-	return indices;
-};
-
-const findCorruptedInstruction = (code: Instruction[]) => {
-	// find the last "jmp" before the end. if we can get past that, we are home free.
-		// if this jmp is +, then we can look ever earlier
-		// loop
-	// so, loop till we found the latest jump that is troublesome.
-	// once you have it, we just need to find any index that can get or beyond it
-		// if we found one that gets us to it, then we know that this jump is the troublemaker, switch it.
-		//up until this point, i'd expect that nothing can get u
-	
-
-
-	for (let i = code.length - 1; i >= 0; i--) {
-		if (code[i].op === "acc") {
-			continue;
-		}
-
-		if (code[i].op === "jmp") {
-			console.log(findIndicesToTarget(code, code.length - i));
-		}
-
-		
-	}	
-	return []
+	return undefined;
 };
 
 const solvePart2 = async () => {
 	const code = await parseInput("day8");
-	const index = findCorruptedInstruction(code);
-	return index;
+	return getAccAfterFix(code);
 };
 
-// solvePart1().then((result) => console.log("Part 1 solution:", result));
+solvePart1().then((result) => console.log("Part 1 solution:", result));
 solvePart2().then((result) => console.log("Part 2 solution:", result));
