@@ -1,4 +1,3 @@
-import { findAncestor, ScriptTarget } from "typescript";
 import { read } from "../../utils";
 
 const parseInput = async (filename: string) => {
