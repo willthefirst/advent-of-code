@@ -36,6 +36,7 @@ const solvePart1 = async () => {
 
 // Credit to https://www.reddit.com/r/adventofcode/comments/ka8z8x/2020_day_10_solutions/gfbo61q?utm_source=share&utm_medium=web2x&context=3
 const getInputCount = (adapters: number[]): number => {
+	console.log(adapters)
 	const countTracker = adapters.map((a) => {
 		return 0;
 	});
@@ -50,12 +51,13 @@ const getInputCount = (adapters: number[]): number => {
 			countTracker[j] += countTracker[i];
 		}
 	}
+	console.log(countTracker)
 
 	return countTracker[countTracker.length - 1];
 };
 
 const solvePart2 = async () => {
-	const adapters = await parseInput("day10");
+	const adapters = await parseInput("day10_test");
 	return getInputCount(adapters);
 };
 
