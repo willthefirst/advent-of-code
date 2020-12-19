@@ -77,7 +77,7 @@ const allPossibleArrays = (arraysToAddTo: any[][], newItems: any[]): any[][] => 
 	}).flat();
 } 
 
-let getArrangementsFromPaths = (adapters: number[], paths: any): number[][] => {
+let getMapsFromPaths = (adapters: number[], paths: any): number[][] => {
 	let unfinishedMaps: number[][] = [[0]];
 	let finishedMaps: number[][] = [];
 
@@ -104,32 +104,15 @@ let getArrangementsFromPaths = (adapters: number[], paths: any): number[][] => {
 				unfinishedMaps[i] = m.concat(nextDestVals[0]);
 			}
 		}
-		console.log(finishedMaps.length);
 	}
 	return finishedMaps;
 };
 
-// getAllArrangements = memoize(getAllArrangements);
-
-// console.log(getAllArrangements([0, 1, 2, 3, 5]));
-// 0,1,2,3,5
-// 0, ,2,3,5
-// 0,    3,5
-// 0,1,  3,5
-// 0,  2,3,5
-// 0,  2,  5
-
-// 0 [ [ 0, 3 ], [ 0, 2 ], [ 0, 1 ] ]
-// 1 [ [ 1, 3 ], [ 1, 2 ] ]
-// 2 [ [ 2, 5 ], [ 2, 3 ] ]
-// 3 [ [ 3, 5 ] ]
-// 4 []
-
 const solvePart2 = async () => {
-	const adapters = await parseInput("day10");
+	const adapters = await parseInput("day10_test");
 	const paths = getAllPaths(adapters);
-	const arrangements = getArrangementsFromPaths(adapters, paths);
-	return arrangements.length;
+	const maps = getMapsFromPaths(adapters, paths);
+	return maps.length;
 };
 
 // solvePart1().then((result) => console.log("Part 1 solution:", result));
