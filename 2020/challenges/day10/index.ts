@@ -34,86 +34,30 @@ const solvePart1 = async () => {
 	return oneJoltDiffs * threeJoltDiffs;
 };
 
-const memoize = (fn: Function): any => {
-	const cache: any = {};
-	return function (arr: any[]) {
-		const key = arr[0];
+// Credit to https://www.reddit.com/r/adventofcode/comments/ka8z8x/2020_day_10_solutions/gfbo61q?utm_source=share&utm_medium=web2x&context=3
+const getInputCount = (adapters: number[]): number => {
+	const countTracker = adapters.map((a) => {
+		return 0;
+	});
 
-		if (key in cache) {
-			return cache[key];
-		}
+	countTracker[0] = 1;
 
-		const result = fn(arr);
-
-		cache[key] = result;
-		console.log(cache);
-		return result;
-	};
-};
-
-const getAllPaths = (adapters: number[]): {} => {
-	const paths: any = {};
 	for (let i = 0; i < adapters.length; i++) {
-		let pathsFromI = [];
-		for (let j = 3; j >= 1; j--) {
-			// Push the serial sequence once
-			if (adapters[i + j] - adapters[i] <= 3) {
-				pathsFromI.push(j + i);
-			}
-		}
-		// This gives us all travel paths between i and i + 3;
-		paths[i] = pathsFromI.sort();
-	}
-	return paths;
-};
-
-const newArrayForEach = (arr: any[], newItems: any[]): any[][] => {
-	return newItems.map(val => arr.concat(val))
-}
-
-const allPossibleArrays = (arraysToAddTo: any[][], newItems: any[]): any[][] => {
-	return arraysToAddTo.map((item) => {
-		return newArrayForEach(item, newItems)
-	}).flat();
-} 
-
-let getMapsFromPaths = (adapters: number[], paths: any): number[][] => {
-	let unfinishedMaps: number[][] = [[0]];
-	let finishedMaps: number[][] = [];
-
-	const lastIndex = Object.keys(paths).length - 1;
-	console.log(paths);
-
-	while (unfinishedMaps.length > 0) {
-		for (let i = 0; i < unfinishedMaps.length; i++) {
-			const m = unfinishedMaps[i];
-			const nextDestKey: number = m[m.length - 1];
-
-			if (nextDestKey === lastIndex) {
-				unfinishedMaps.splice(i, 1);
-				finishedMaps.push(m);
+		for (let j = i + 1; j <= i + 3 && j < adapters.length; j++) {
+			if (adapters[j] - adapters[i] > 3) {
 				break;
 			}
-
-			const nextDestVals: number[] = paths[nextDestKey];
-			if (nextDestVals.length > 1) {
-				let newPaths = newArrayForEach(m, nextDestVals);
-				unfinishedMaps.splice(i, 1, ...newPaths);
-				break;
-			} else {
-				unfinishedMaps[i] = m.concat(nextDestVals[0]);
-			}
+			countTracker[j] += countTracker[i];
 		}
 	}
-	return finishedMaps;
+
+	return countTracker[countTracker.length - 1];
 };
 
 const solvePart2 = async () => {
-	const adapters = await parseInput("day10_test");
-	const paths = getAllPaths(adapters);
-	const maps = getMapsFromPaths(adapters, paths);
-	return maps.length;
+	const adapters = await parseInput("day10");
+	return getInputCount(adapters);
 };
 
-// solvePart1().then((result) => console.log("Part 1 solution:", result));
+solvePart1().then((result) => console.log("Part 1 solution:", result));
 solvePart2().then((result) => console.log("Part 2 solution:", result));
