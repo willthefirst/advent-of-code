@@ -24,12 +24,12 @@ interface PositionChange {
 
 type Change = OrientationChange | PositionChange;
 
-const parseInput = async (filename: string): Promise<Change[]> => {
+const parseInputWithRules = async (filename: string, rulesFn: Function): Promise<Change[]> => {
 	const string = await read(filename);
-	return string.split("\n").map(convertToChange);
+	return string.split("\n").map((s) => rulesFn(s));
 };
 
-const convertToChange = (str: string): OrientationChange | PositionChange => {
+const part1Rules = (str: string): OrientationChange | PositionChange => {
 	const type = str.substr(0, 1);
 	const value = Number(str.substr(1));
 	let change: OrientationChange | PositionChange;
@@ -132,25 +132,25 @@ const updatePosition = (pos: Position, vector: Vector): Position => {
  * @param  {number} turn reflects how many 90 degree turns we have to make to the left (negative) or right (positive)
  * @returns Position
  */
-const updateOrientation = (pos: Position, turns: number): Position => {
+const updateOrientationByDegrees = (pos: Position, turns: number): Position => {
 	const leftOrRight = turns / Math.abs(turns);
-	
+
 	// Vertical movement
 	if (pos.orientation.changeX === 0) {
 		// Moving north
 		if (pos.orientation.changeY < 0) {
 			pos.orientation.changeX = leftOrRight;
-		// Moving south
+			// Moving south
 		} else {
 			pos.orientation.changeX = -leftOrRight;
 		}
 		pos.orientation.changeY = 0;
-	// Horizontal movement
+		// Horizontal movement
 	} else if (pos.orientation.changeY === 0) {
 		// Moving west
 		if (pos.orientation.changeX < 0) {
 			pos.orientation.changeY += -leftOrRight;
-		// Moving east
+			// Moving east
 		} else {
 			pos.orientation.changeY += leftOrRight;
 		}
@@ -164,10 +164,156 @@ const updateOrientation = (pos: Position, turns: number): Position => {
 		return pos;
 	}
 
-	return updateOrientation(pos, turns);
+	return updateOrientationByDegrees(pos, turns);
 };
 
-const calculateManhattanDistance = (changes: Change[]): number => {
+const updateWaypointByDegrees = (pos: Position, turns: number): Position => {
+	const leftOrRight = turns / Math.abs(turns);
+	const { changeX, changeY } = pos.orientation;
+
+	if (leftOrRight > 0) {
+		// Right 90deg turn
+		pos.orientation.changeX = changeY * -1;
+		pos.orientation.changeY = changeX;
+	} else {
+		// Left 90deg turn
+		pos.orientation.changeX = changeY;
+		pos.orientation.changeY = changeX * -1;
+	}
+
+	// Reduce number of turns left
+	turns = (Math.abs(turns) - 1) * leftOrRight;
+
+	if (turns === 0) {
+		return pos;
+	}
+
+	return updateWaypointByDegrees(pos, turns);
+};
+
+const updateOrientationByVector = (pos: Position, vector: Vector): Position => {
+	pos.orientation.changeX += vector.changeX;
+	pos.orientation.changeY += vector.changeY;
+	return pos;
+};
+
+const applyChangesForPart1 = (pos: Position, changes: Change[]) => {
+	changes.forEach((change, i) => {
+		switch (change.type) {
+			case "position":
+				pos = updatePosition(pos, change.val);
+				break;
+			case "orientation":
+				pos = updateOrientationByDegrees(pos, change.val);
+				break;
+			default:
+				console.error("Change doesn't seem valid.");
+				break;
+		}
+	});
+	return pos;
+};
+
+const part2Rules = (str: string) => {
+	const type = str.substr(0, 1);
+	const value = Number(str.substr(1));
+	let change: {};
+
+	switch (type) {
+		case "N":
+			change = {
+				type: "orientationByVector",
+				val: {
+					changeX: 0,
+					changeY: -value
+				}
+			};
+			break;
+		case "E":
+			change = {
+				type: "orientationByVector",
+				val: {
+					changeX: value,
+					changeY: 0
+				}
+			};
+			break;
+		case "S":
+			change = {
+				type: "orientationByVector",
+				val: {
+					changeX: 0,
+					changeY: value
+				}
+			};
+			break;
+		case "W":
+			change = {
+				type: "orientationByVector",
+				val: {
+					changeX: -value,
+					changeY: 0
+				}
+			};
+			break;
+		case "L":
+			change = {
+				type: "orientationByDegrees",
+				val: -(value / 90)
+			};
+			break;
+		case "R":
+			change = {
+				type: "orientationByDegrees",
+				val: value / 90
+			};
+			break;
+		case "F":
+			change = {
+				type: "position",
+				val: value as number
+			};
+			break;
+		default:
+			console.error("That string didn't match one of the expected types");
+			break;
+	}
+
+	return change!;
+};
+
+const moveForward = (pos: Position, val: number): Position => {
+	pos.x += val * pos.orientation.changeX;
+	pos.y += val * pos.orientation.changeY;
+	return pos;
+};
+
+const applyChangesForPart2 = (pos: Position, changes: { val: any; type: string }[]): Position => {
+	changes.forEach((change, i) => {
+		switch (change.type) {
+			case "position":
+				pos = moveForward(pos, change.val);
+				break;
+			case "orientationByVector":
+				pos = updateOrientationByVector(pos, change.val);
+				break;
+			case "orientationByDegrees":
+				pos = updateWaypointByDegrees(pos, change.val);
+				break;
+			default:
+				console.error("Change doesn't seem valid.");
+				break;
+		}
+	});
+	return pos;
+};
+
+const calculateManhattanDistance = (pos: Position): number => {
+	return Math.abs(pos.x) + Math.abs(pos.y);
+};
+
+const solvePart1 = async () => {
+	const changes = await parseInputWithRules("day12", part1Rules);
 	let pos: Position = {
 		x: 0,
 		y: 0,
@@ -176,32 +322,24 @@ const calculateManhattanDistance = (changes: Change[]): number => {
 			changeY: 0
 		}
 	};
-
-	changes.forEach((change, i) => {
-		switch (change.type) {
-			case "position":
-				pos = updatePosition(pos, change.val);
-				break;
-			case "orientation":
-				pos = updateOrientation(pos, change.val);
-				break;
-			default:
-				console.error("Change doesn't seem valid.");
-				break;
-		}
-	});
-	return Math.abs(pos.x) + Math.abs(pos.y);
-};
-
-const solvePart1 = async () => {
-	const changes = await parseInput("day12");
-	return calculateManhattanDistance(changes);
+	pos = applyChangesForPart1(pos, changes);
+	return calculateManhattanDistance(pos);
 };
 
 const solvePart2 = async () => {
-	const moves = await parseInput("day12_test");
-	return moves;
+	const changes = await parseInputWithRules("day12", part2Rules);
+	let pos: Position = {
+		x: 0,
+		y: 0,
+		orientation: {
+			changeX: 10,
+			changeY: -1
+		}
+	};
+
+	pos = applyChangesForPart2(pos, changes);
+	return calculateManhattanDistance(pos);
 };
 
 solvePart1().then((result) => console.log("Part 1 solution:", result));
-// solvePart2().then((result) => console.log("Part 2 solution:", result));
+solvePart2().then((result) => console.log("Part 2 solution:", result));
