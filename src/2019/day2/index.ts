@@ -89,13 +89,8 @@ export const solvePart2 = async (filepath: string): Promise<number | null> => {
   return null;
 };
 
-solvePart1('2019/day2/input').then((result) =>
-  console.log('Part 1 solution:', result)
-);
-
-solvePart2('2019/day2/input').then((result) =>
-  console.log('Part 2 solution:', result)
-);
+solvePart1('input').then((result) => console.log('Part 1 solution:', result));
+solvePart2('input').then((result) => console.log('Part 2 solution:', result));
 
 // redo template
 // Total time: 1h20. Need to cut that in HALF.
