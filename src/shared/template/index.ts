@@ -1,4 +1,4 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 const inputPath = 'INPUT/PATH/HERE';
 const inputPathTest = 'TEST/PATH/HERE';
 

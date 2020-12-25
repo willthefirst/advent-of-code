@@ -3,7 +3,7 @@ import {
   parseInput,
   calculateFuelRequirement,
   calculateSubFuelRequirement
-} from './day1';
+} from '.';
 
 describe('solvePart1()', () => {
   it('should calculate the total fuel sum from an input file', async () => {

@@ -1,4 +1,4 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 export const parseInput = async (filename: string): Promise<number[]> => {
   const masses = await (await read(filename)).split('\n').map(Number);
@@ -32,9 +32,9 @@ export const solvePart2 = async (filepath: string): Promise<number> => {
   return fuelSum;
 };
 
-solvePart1('2019/inputs/day1').then((result) =>
+solvePart1('2019/day1/input').then((result) =>
   console.log('Part 1 solution:', result)
 );
-solvePart2('2019/inputs/day1').then((result) =>
+solvePart2('2019/day1/input_test').then((result) =>
   console.log('Part 2 solution:', result)
 );
