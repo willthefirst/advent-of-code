@@ -1,4 +1,4 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 type Range = [number, number];
 
@@ -9,7 +9,7 @@ const parseInput = async (
   nearbyTickets: number[][];
   rules: Range[];
 }> => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   let [rulesStr, yourTicketStr, nearbyTicketsStr] = string.split('\n\n');
   const rules = rules.match(/\d-\d/);
   console.log(rules, yourTicket, nearbyTickets);
@@ -23,13 +23,13 @@ const parseInput = async (
 // const getInvalidValues = (tickets, rules) => {};
 
 const solvePart1 = async () => {
-  const tickets = await parseInput('day16_test');
+  const tickets = await parseInput('input');
   // getInvalidValues(tickets, rules);
   return tickets;
 };
 
 const solvePart2 = async () => {
-  const tickets = await parseInput('day16');
+  const tickets = await parseInput('input');
   return tickets;
 };
 

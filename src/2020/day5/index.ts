@@ -1,7 +1,7 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 const parseInput = async (filename: string): Promise<string[]> => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   return string.split('\n');
 };
 
@@ -32,13 +32,13 @@ const directionsToSeatId = (directions: string): number => {
 };
 
 const solvePart1 = async () => {
-  const seats = await parseInput('day5');
+  const seats = await parseInput('input');
   const seatIds = seats.map(directionsToSeatId);
   return Math.max(...seatIds);
 };
 
 const solvePart2 = async () => {
-  const seats = await parseInput('day5');
+  const seats = await parseInput('input');
   const seatIds = seats.map(directionsToSeatId).sort((a, b) => a - b);
   for (let i = seatIds.length - 1; i >= 0; i--) {
     if (seatIds[i] - seatIds[i - 1] > 1) {

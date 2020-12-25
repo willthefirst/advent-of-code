@@ -1,11 +1,11 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 const strToNums = (str: string): number[] => {
   return str.split('\n').map((line) => parseInt(line, 10));
 };
 
 const parsePuzzleInput = async (filename: string): Promise<number[]> => {
-  return read(filename).then(strToNums);
+  return read(__dirname, filename).then(strToNums);
 };
 
 const sortNumArray = (nums: number[]) => {
@@ -42,7 +42,7 @@ const findTwoNumsThatSumToX = (nums: number[], x: number): number[] | null => {
 };
 
 const solvePart1 = async (): Promise<void> => {
-  let nums: number[] = await parsePuzzleInput('day1');
+  const nums: number[] = await parsePuzzleInput('input');
   const result = findTwoNumsThatSumToX(nums, 2020);
 
   if (!result) {
@@ -57,10 +57,9 @@ solvePart1();
 /* Part 2 */
 
 const solvePart2 = async () => {
-  let nums: number[] = await parsePuzzleInput('day1');
+  const nums: number[] = await parsePuzzleInput('input');
   let foundTwoNums = null;
   let i = 0;
-  let x = 0;
 
   while (i < nums.length && !foundTwoNums) {
     foundTwoNums = findTwoNumsThatSumToX(nums.slice(i + 1), 2020 - nums[i]);

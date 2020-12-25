@@ -1,7 +1,7 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 const parseInput = async (filename: string) => {
-  return read(filename).then((string: string) => {
+  return read(__dirname, filename).then((string: string) => {
     return string.split('\n');
   });
 };
@@ -62,7 +62,7 @@ const initializeFromInstructions = (
 };
 
 const solvePart1 = async () => {
-  const instructions = await parseInput('day14');
+  const instructions = await parseInput('input');
   const memory = initializeFromInstructions(instructions);
   let result = 0;
   for (let key in memory) {
@@ -137,7 +137,7 @@ const initializeWithMemAddressDecoder = (
 };
 
 const solvePart2 = async () => {
-  const instructions = await parseInput('day14');
+  const instructions = await parseInput('input');
   const memory = initializeWithMemAddressDecoder(instructions);
   let result = 0;
   for (let key in memory) {

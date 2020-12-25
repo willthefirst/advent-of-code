@@ -1,9 +1,9 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 /* Part 1 */
 
 const parseInput = async (filename: string): Promise<string[]> => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   return (
     string
       // Strip unecessary new lines within an entry
@@ -156,7 +156,7 @@ const hasValidFields = (ppString: string): boolean => {
 
 /* Part 1 */
 
-parseInput('day4').then((passports) =>
+parseInput('input').then((passports) =>
   console.log('Part 1 solution: ', passports.filter(hasRequiredFields).length)
 );
 
@@ -172,7 +172,7 @@ parseInput('day4').then((passports) =>
 // 	console.log(passports.filter(hasRequiredFields).filter(hasValidFields).length === 4)
 // );
 
-parseInput('day4').then((passports) =>
+parseInput('input').then((passports) =>
   console.log(
     'Part 2 solution: ',
     passports.filter(hasRequiredFields).filter(hasValidFields).length

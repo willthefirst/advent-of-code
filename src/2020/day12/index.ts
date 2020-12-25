@@ -1,4 +1,4 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 interface Vector {
   changeX: number;
@@ -28,7 +28,7 @@ const parseInputWithRules = async (
   filename: string,
   rulesFn: Function
 ): Promise<Change[]> => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   return string.split('\n').map((s) => rulesFn(s));
 };
 
@@ -319,7 +319,7 @@ const calculateManhattanDistance = (pos: Position): number => {
 };
 
 const solvePart1 = async () => {
-  const changes = await parseInputWithRules('day12', part1Rules);
+  const changes = await parseInputWithRules('input', part1Rules);
   let pos: Position = {
     x: 0,
     y: 0,
@@ -333,7 +333,7 @@ const solvePart1 = async () => {
 };
 
 const solvePart2 = async () => {
-  const changes = await parseInputWithRules('day12', part2Rules);
+  const changes = await parseInputWithRules('input', part2Rules);
   let pos: Position = {
     x: 0,
     y: 0,

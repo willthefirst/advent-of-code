@@ -1,7 +1,7 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 const parseInput = async (filename: string): Promise<number[]> => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   return createAdapterArray(
     string
       .split('\n')
@@ -15,7 +15,7 @@ const createAdapterArray = (arr: number[]) => {
 };
 
 const solvePart1 = async () => {
-  const adapters = await parseInput('day10');
+  const adapters = await parseInput('input');
   let oneJoltDiffs: number = 0;
   let threeJoltDiffs: number = 0;
 
@@ -57,7 +57,7 @@ const getInputCount = (adapters: number[]): number => {
 };
 
 const solvePart2 = async () => {
-  const adapters = await parseInput('day10_test');
+  const adapters = await parseInput('input');
   return getInputCount(adapters);
 };
 

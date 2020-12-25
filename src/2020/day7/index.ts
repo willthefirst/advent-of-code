@@ -1,7 +1,7 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 const parseInput = async (filename: string) => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   let rules: any = {};
   string.split('\n').forEach((rule) => {
     const [parent, rest] = rule.split(' bags contain ');
@@ -42,7 +42,7 @@ const getAllPossibleParents = (bag: string, rules: any): string[] => {
 };
 
 const solvePart1 = async () => {
-  const bagRules = await parseInput('day7');
+  const bagRules = await parseInput('input');
   return getAllPossibleParents('shiny gold', bagRules).length;
 };
 
@@ -60,7 +60,7 @@ const getRequiredChildren = (bag: string, rules: any): string[] => {
 };
 
 const solvePart2 = async () => {
-  const bagRules = await parseInput('day7');
+  const bagRules = await parseInput('input');
   return getRequiredChildren('shiny gold', bagRules).length;
 };
 

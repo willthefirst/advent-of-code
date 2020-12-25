@@ -1,7 +1,7 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 const parseInput = async (filename: string): Promise<string[][]> => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   return string.split('\n').map((str): string[] => {
     return str.split('');
   });
@@ -164,13 +164,13 @@ const seatGuests = (
 };
 
 const solvePart1 = async () => {
-  const seats = await parseInput('day11');
+  const seats = await parseInput('input');
   const finalSeating = seatGuests(seats, 0, countAdjacentOccupied, 4);
   return countTotalOccupied(finalSeating);
 };
 
 const solvePart2 = async () => {
-  const seats = await parseInput('day11');
+  const seats = await parseInput('input');
   const finalSeating = seatGuests(seats, 0, countVisibleOccupied, 5);
   return countTotalOccupied(finalSeating);
 };

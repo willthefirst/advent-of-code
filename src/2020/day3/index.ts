@@ -1,7 +1,7 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 const parsePuzzleInput = (filename: string): Promise<string[]> => {
-  return read(filename).then((string) => {
+  return read(__dirname, filename).then((string) => {
     return string.split('\n');
   });
 };
@@ -12,7 +12,7 @@ const countTreesOnSlope = async (
   moveX: number,
   moveY: number
 ): Promise<number> => {
-  const puzzle = await parsePuzzleInput('day3');
+  const puzzle = await parsePuzzleInput('input');
   const numRows = puzzle.length - 1;
   const numCols = puzzle[0].length;
 

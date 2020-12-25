@@ -1,7 +1,7 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 const parseInput = async (filename: string) => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   return string.split(',').map(Number);
 };
 
@@ -40,12 +40,12 @@ const getNthNumber = (n: number, nums: number[]): number => {
 };
 
 const solvePart1 = async () => {
-  const numbers = await parseInput('day15');
+  const numbers = await parseInput('input');
   return getNthNumber(2020, numbers);
 };
 
 const solvePart2 = async () => {
-  const numbers = await parseInput('day15');
+  const numbers = await parseInput('input');
   return getNthNumber(30000000, numbers);
 };
 

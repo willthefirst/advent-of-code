@@ -1,7 +1,7 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 const parseInput = async (filename: string) => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   return string.split('\n').map((s) => Number(s));
 };
 
@@ -29,7 +29,7 @@ const findError = (data: number[], preambleLength: number): number | null => {
 };
 
 const solvePart1 = async () => {
-  const data: number[] = await parseInput('day9');
+  const data: number[] = await parseInput('input');
   return findError(data, 25);
 };
 
@@ -95,7 +95,7 @@ let findEncryptionWeakness = (
 };
 
 const solvePart2 = async () => {
-  const data = await parseInput('day9');
+  const data = await parseInput('input');
   return findEncryptionWeakness(data, 25);
 };
 

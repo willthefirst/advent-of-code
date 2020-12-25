@@ -1,11 +1,11 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 interface Instruction {
   op: string;
   arg: number;
 }
 const parseInput = async (filename: string): Promise<Instruction[]> => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   const code: Instruction[] = string.split('\n').map(
     (line: string): Instruction => {
       return {
@@ -68,7 +68,7 @@ const catchLoop = (fn: Function) => {
 
 const solvePart1 = async () => {
   let execute_ = catchLoop(execute);
-  const code = await parseInput('day8');
+  const code = await parseInput('input');
   const [prevIndex, acc] = execute_(code, 0, 0, 0, execute_);
   return acc;
 };
@@ -105,7 +105,7 @@ const getAccAfterFix = (code: Instruction[]): number | undefined => {
 };
 
 const solvePart2 = async () => {
-  const code = await parseInput('day8');
+  const code = await parseInput('input');
   return getAccAfterFix(code);
 };
 

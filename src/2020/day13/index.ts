@@ -1,11 +1,11 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 type busId = string | number;
 
 const parseInputForP1 = async (
   filename: string
 ): Promise<{ earliestDepartTime: number; busIds: number[] }> => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   const [s1, s2] = string.split('\n');
   const earliestDepartTime: number = Number(s1);
   const busIds: number[] = s2
@@ -18,7 +18,7 @@ const parseInputForP1 = async (
 const parseInputForP2 = async (
   filename: string
 ): Promise<{ earliestDepartTime: number; busIds: busId[] }> => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   const [s1, s2] = string.split('\n');
   const earliestDepartTime: number = Number(s1);
   const busIds: busId[] = s2
@@ -58,7 +58,7 @@ const getWait = (t1: number, t2: number) => {
 };
 
 const solvePart1 = async () => {
-  const { earliestDepartTime, busIds } = await parseInputForP1('day13');
+  const { earliestDepartTime, busIds } = await parseInputForP1('input');
   let minWait: number = Infinity;
   let bestBusId: number = 0;
 
@@ -85,7 +85,6 @@ const earliestTimeForBusEveryMinute = (
   busIds: busId[],
   times: busId[]
 ): number => {
-  console.log(times);
   const firstBusId = busIds[0] as number;
   const firstTime = times[0] as number;
 
@@ -118,7 +117,7 @@ const earliestTimeForBusEveryMinute = (
 };
 
 const solvePart2 = async (): Promise<number> => {
-  const { busIds } = await parseInputForP2('day13_test');
+  const { busIds } = await parseInputForP2('input_test');
   const busIds2 = Object.assign({}, busIds);
   return earliestTimeForBusEveryMinute(busIds2, busIds);
 };

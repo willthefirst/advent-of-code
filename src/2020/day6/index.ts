@@ -1,7 +1,7 @@
-import { read } from '../../../shared/utils';
+import { read } from '~/shared/utils';
 
 const parseInput = async (filename: string) => {
-  const string = await read(filename);
+  const string = await read(__dirname, filename);
   return string.split('\n\n');
 };
 
@@ -25,7 +25,7 @@ const countAgreements = (group: string[]): number => {
 };
 
 const solvePart1 = async () => {
-  const groups = await parseInput('day6');
+  const groups = await parseInput('input');
   return groups
     .map((group) => {
       return countUniqueChars(group.replace(/\n/g, ''));
@@ -34,7 +34,7 @@ const solvePart1 = async () => {
 };
 
 const solvePart2 = async () => {
-  const groups = await parseInput('day6');
+  const groups = await parseInput('input');
   return groups
     .map((group) => {
       return countAgreements(group.split('\n'));
