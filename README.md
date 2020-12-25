@@ -4,8 +4,9 @@ My answers to [Advent Of Code 2020](https://adventofcode.com/2020), done in Java
 
 ## Development
 
-1) Install dependencies: `npm install`  
-2) Run locally: `nodemon {path/to/file.ts}`
+Install dependencies: `npm install`  
+Run locally: `npm run start {path/to/file.ts}`  
+To use Jest: `npm run test {path/to/directory}`
 
 For VS Code debugger, run `nodemon`, then attach debugger that process.
 

@@ -1,4 +1,4 @@
-import { read } from '../../shared/utils';
+import { read } from '../../../shared/utils';
 
 export const parseInput = async (filename: string): Promise<number[]> => {
   const masses = await (await read(filename)).split('\n').map(Number);

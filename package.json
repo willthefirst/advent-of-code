@@ -7,7 +7,7 @@
     "start": "nodemon",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
-    "test": "jest"
+    "test": "jest --watch"
   },
   "author": "Will Moritz",
   "license": "ISC",

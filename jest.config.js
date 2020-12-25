@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 module.exports = {
   roots: ['<rootDir>/2019', '<rootDir>/2020', '<rootDir>/shared'],
   transform: {
