@@ -1,7 +1,9 @@
 import { read } from '~/shared/utils';
 
 export const parseInput = async (filename: string): Promise<number[]> => {
-  const program = await (await read(filename)).split(',').map(Number);
+  const program = await (await read(__dirname, filename))
+    .split(',')
+    .map(Number);
   return program;
 };
 

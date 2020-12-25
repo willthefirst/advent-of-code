@@ -1,7 +1,9 @@
 import { read } from '~/shared/utils';
 
 export const parseInput = async (filename: string): Promise<number[]> => {
-  const masses = await (await read(filename)).split('\n').map(Number);
+  const masses = await (await read(__dirname, filename))
+    .split('\n')
+    .map(Number);
   return masses;
 };
 
@@ -32,9 +34,10 @@ export const solvePart2 = async (filepath: string): Promise<number> => {
   return fuelSum;
 };
 
-solvePart1('2019/day1/input').then((result) =>
-  console.log('Part 1 solution:', result)
-);
-solvePart2('2019/day1/input_test').then((result) =>
+solvePart1('input').then((result) => {
+  console.log('Part 1 solution:', result);
+});
+
+solvePart2('input_test').then((result) =>
   console.log('Part 2 solution:', result)
 );
